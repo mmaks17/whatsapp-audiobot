@@ -1,7 +1,9 @@
 ## This chatbot download audio messages from whatsapp chat, translate it and reply text message
 
 
-yourtoken - token from https://mcs.mail.ru/app/mcs2676925534/services/machinelearning/voice/access/
+vktoken - token from https://mcs.mail.ru/app/mcs2676925534/services/machinelearning/voice/access/
+
+yatoken - token from https://cloud.yandex.ru/docs/iam/concepts/authorization/api-key
 
 * enable in your phone dev feature multi  login 
 * first run app and render qr code `echo 2@... | qrencode -t ansiutf8` in a terminal  and scan it 
