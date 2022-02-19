@@ -17,7 +17,8 @@ export VOICE_MODEL="MAILRU"
 or 
 
 ```
-export yatoken="<your_yandex_token>"
+export yatoken=<your_yandex_token>
+export vktoken=<your_mcs_token>
 export VOICE_MODEL="YANDEX"
 ```
 

@@ -12,8 +12,8 @@ import (
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
-	"github.com/mmaks17/yavoice"
 	"github.com/mmaks17/vkvoice"
+	"github.com/mmaks17/yavoice"
 	"go.mau.fi/whatsmeow"
 	waProto "go.mau.fi/whatsmeow/binary/proto"
 	"go.mau.fi/whatsmeow/store/sqlstore"
@@ -41,8 +41,8 @@ func getenv(key, fallback string) string {
 
 func init() {
 	starttime = time.Now().Unix()
-	vktoken = getenv("vktoken", "<place_msc_token_here>")
-	yatoken = getenv("yatoken", "<place_yandex_token_here>")
+	vktoken = getenv("vktoken", "BLANK")
+	yatoken = getenv("yatoken", "BLANK")
 	VOICE_MODEL = getenv("VOICE_MODEL", "YANDEX")
 	// whitechat = "7XXXXXXXXXX-XXXXXXXXXXXX" // тестовый час с ботом
 }
@@ -60,26 +60,31 @@ func eventHandler(evt interface{}) {
 				}
 				exts, _ := mime.ExtensionsByType(img.GetMimetype())
 				path := fmt.Sprintf("%s%s", v.Info.ID, exts[0])
-				err = os.WriteFile(path, data, 0600)
+				err = os.WriteFile(path, data, 0666)
 				if err != nil {
 					fmt.Printf("Failed to save image: %v", err)
 					return
 				}
 				var rezstr string
 				var errv error
-				if VOICE_MODEL == "YANDEX" {
-					rezstr, errv = yavoice.Voice2Text(path, yatoken)
-				}
-				if VOICE_MODEL == "MAILRU" {
+				if img.GetSeconds() >= 30 && vktoken != "BLANK" {
 					rezstr, errv = vkvoice.Voice2Text(path, vktoken)
+				} else {
+					if VOICE_MODEL == "YANDEX" {
+						rezstr, errv = yavoice.Voice2Text(path, yatoken)
+					}
+					if VOICE_MODEL == "MAILRU" {
+						rezstr, errv = vkvoice.Voice2Text(path, vktoken)
+
+					}
 
 				}
+
 				rezstr = v.Info.Sender.User + "по мнению " + VOICE_MODEL + " сказал: " + rezstr
 				_ = os.Remove(path)
 				if errv != nil {
 					fmt.Println(err)
 				} else {
-					// fmt.Println(rezstr)
 					msg := &waProto.Message{Conversation: proto.String(rezstr)}
 
 					_, err = client.SendMessage(v.Info.Chat, "", msg)
