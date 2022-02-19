@@ -70,6 +70,7 @@ func eventHandler(evt interface{}) {
 				var errv error
 				if img.GetSeconds() >= 30 && vktoken != "BLANK" {
 					rezstr, errv = vkvoice.Voice2Text(path, vktoken)
+					rezstr = v.Info.Sender.User + "по мнению MAIL сказал: " + rezstr
 				} else {
 					if VOICE_MODEL == "YANDEX" {
 						rezstr, errv = yavoice.Voice2Text(path, yatoken)
@@ -78,10 +79,11 @@ func eventHandler(evt interface{}) {
 						rezstr, errv = vkvoice.Voice2Text(path, vktoken)
 
 					}
+					rezstr = v.Info.Sender.User + "по мнению " + VOICE_MODEL + " сказал: " + rezstr
 
 				}
 
-				rezstr = v.Info.Sender.User + "по мнению " + VOICE_MODEL + " сказал: " + rezstr
+				
 				_ = os.Remove(path)
 				if errv != nil {
 					fmt.Println(err)
