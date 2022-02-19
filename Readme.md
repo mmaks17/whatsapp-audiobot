@@ -35,3 +35,11 @@ you can build image
 docker build -t wh-audio . 
 docker run -it  -v ./examplestore.db:/app/examplestore.db  -e vktoken=<yourtoken> -e yatoken=<mcstoken> -e VOICE_MODEL=YANDEX wh-audio  
 ```
+
+
+easy kill 
+```
+ps -aux | grep "whatsapp-audiobot" | grep -v "grep " |  awk {'print $2'} | xargs kill -9
+nohup ./whatsapp-audiobot &
+
+```
