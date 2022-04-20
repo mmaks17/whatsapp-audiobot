@@ -137,7 +137,6 @@ func main() {
 			}
 		}
 	} else {
-		// Already logged in, just connect
 		err = client.Connect()
 		if err != nil {
 			panic(err)
