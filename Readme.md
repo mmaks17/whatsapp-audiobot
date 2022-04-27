@@ -43,3 +43,5 @@ ps -aux | grep "whatsapp-audiobot" | grep -v "grep " |  awk {'print $2'} | xargs
 nohup ./whatsapp-audiobot &
 
 ```
+  
+  
